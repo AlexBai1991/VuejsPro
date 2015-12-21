@@ -1,0 +1,194 @@
+<style lang="sass">
+	.youhui-lists {
+		padding-top: 43px;
+		margin: 0 10px;
+		overflow-x: hidden; 
+	}
+	.youhui {
+		display: block;
+		border-bottom: 1px solid #ddd;
+		padding: 10px 0; 
+		&:last-child {
+			border-bottom: 0 none;
+		}
+		@at-root .youhui-title {
+			font-size: 16px;
+			font-weight: bold;
+			height: 28px;
+			line-height: 28px;
+		    white-space: nowrap;
+		    text-overflow: ellipsis;
+		    overflow: hidden;
+		}
+		@at-root .youhui-content {
+			display: flex;
+			.youhui-avatar {
+				width: 50px;
+				height: 50px;
+				border-radius: 50px;
+				overflow: hidden;
+				margin-right: 20px;
+			}
+			@at-root .youhui-detail {
+				display: flex;
+				flex-flow: column wrap;
+				justify-content: space-between;
+				flex: 1;
+				p {
+					display: flex;
+					justify-content: space-between; 
+					&:nth-child(1) {
+						margin: 6px 0;
+						.reply-num i{
+							color: #f04848;
+							font-weight: bold;
+						}
+					}
+				}
+			}
+		}
+	}
+	.list-item {
+		display: flex;
+		display: -webkit-box;
+		flex-flow: row nowrap;
+		-webkit-box-orient: horizontal;
+		padding: 10px 0;
+		border-bottom: 1px solid #eee;
+	}
+	.list-item:last-child {
+		border-bottom: 0 none;
+	}
+	.list-item .item-img {
+		width: 90px;
+		/*height: 60px;*/
+		margin-right: 10px;
+	}
+	.item-img img {
+		width: 100%;
+		height: auto;
+
+	}
+	.list-item .item-desc {
+		flex: 1;
+		-webkit-box-flex: 1;
+	}
+	.item-desc .item-title {
+		font-size: 16px;
+		line-height: 1.5;
+	}
+	.item-desc .item-detail {
+		line-height: 18px;
+	}
+</style>
+
+<template>
+    <header-component :app-name='appName'></header-component>
+    <!-- <nav-component :nav-items="navItems"></nav-component> -->
+    <!-- <slide-component :slide-items="slideItems"></slide-component> -->
+	<div class="youhui-lists">
+		<a v-for="item in topics" class="youhui" href="javascript:;">
+			<h3 class="youhui-title" title="{{ item.tab }}">{{ item.title }}</h3>
+			<div class="youhui-content">
+				<img :src="item.author['avatar_url']" alt="头像" class="youhui-avatar">
+				<div class="youhui-detail">
+					<p><span class="avatar-pic">{{ item.author.loginname }}</span><span class="reply-num"><i>{{ item.reply_count }}</i>/{{ item.visit_count }}</span></p>
+					<p><span>{{ item.create_at | getTimeStr true}}</span><span>{{ item.last_reply_at | getTimeStr true}}</span></p>
+				</div>
+			</div>
+		</a>		
+	</div>
+</template>
+
+<script>
+	var storage = require('../js/storage.js');
+	module.exports = {
+		data: function () {
+			return {
+				appName: 'VueApp',
+				navItems: [
+					{text: '优惠', link: '/youhui'},
+					{text: '海淘', link: '/haitao'}, 
+					{text: '发现', link: '/faxian'}, 
+					{text: '原创', link: '/yuanchuang'}, 
+					{text: '资讯', link: '/zixun'}
+				],
+				slideItems: [
+					{ image: '//eimg.smzdm.com/201512/18/5673e592470586446.png', link: '://alexbai.githut.io'},
+					{ image: '//eimg.smzdm.com/201512/18/5673e56bc72ad7183.jpg', link: ''},
+					{ image: '//eimg.smzdm.com/201512/18/567367923ebdd7381.png', link: ''},
+					{ image: '//eimg.smzdm.com/201512/18/5673e6540b1894931.png', link: ''},
+					{ image: '//eimg.smzdm.com/201512/18/5673e592470586446.png', link: '://alexbai.githut.io'},
+				],
+				topics: [],
+				searchKey: {
+					page: 1,
+					limit: 20,
+					tab: 'all',
+					mdrender: true
+				},
+				canScroll: true
+			};
+		},
+		route: {
+			data: function (transition) {
+				var _self = this;
+				_self.searchKey.page = 1;
+				_self.getTopics();
+
+				// 滚动加载更多
+				document.addEventListener('scroll', _self.getMoreTopics);
+			}
+		},
+		computed: {
+			clientHeight: function () {
+				return document.documentElement.clientHeight;
+			},
+			wScrollObj: function () {
+				return document.body;
+			}
+		},
+		methods: {
+			getParams: function (obj) {
+				if (!obj || typeof obj !== 'object') { return; }
+				var res = [];
+				for (var key in obj) {
+					res.push(key + '=' + obj[key]);
+				}
+				return res.join('&');
+			},
+			getTopics: function () {
+				var _self = this; 
+				var params = _self.getParams(_self.searchKey);
+				storage.fetchData('https://cnodejs.org/api/v1/topics?' + params, function (d) {
+					_self.canScroll = true;
+					var topics = d && d.data;
+					if (topics.length) {
+						if (_self.searchKey.page === 1) {
+							_self.topics = d.data;
+						} else {
+							_self.topics = _self.topics.concat(d.data);
+						}
+					}
+				});
+			},
+			getMoreTopics: function (event) {
+				var _self = this;
+				if (_self.canScroll) {
+					var cHeight = _self.clientHeight, wsHeight = _self.wScrollObj.scrollHeight, wsTop = _self.wScrollObj.scrollTop;
+
+					if (cHeight + wsTop > wsHeight - 100) {
+						_self.canScroll = false;
+						_self.searchKey.page++;
+						_self.getTopics();
+					}
+				}
+			}
+		},
+		components: {
+			'header-component': require('../components/header.vue'),
+			'nav-component': require('../components/nav.vue'),
+			'slide-component': require('../components/slide.vue')
+		}
+	};
+</script>
