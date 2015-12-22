@@ -1,6 +1,5 @@
 <style lang="sass">
 	.youhui-lists {
-		padding-top: 43px;
 		margin: 0 10px;
 		overflow-x: hidden; 
 	}
@@ -83,21 +82,37 @@
 </style>
 
 <template>
-    <header-component :app-name='appName'></header-component>
-    <!-- <nav-component :nav-items="navItems"></nav-component> -->
-    <!-- <slide-component :slide-items="slideItems"></slide-component> -->
-	<div class="youhui-lists">
+	<!-- 头部导航 -->
+    <nav-head :app-name='appName'
+    		:nav-items="navItems" 
+    		:show-menu.sync="showMenu"
+    		:page-type="pageType">
+    </nav-head>
+    <!-- 头部导航 -->
+    <!-- 轮播图 -->
+    <slide-comp :slide-items="slideItems">
+    </slide-comp>
+    <!-- 轮播图 -->
+    <!-- 优惠列表 -->
+	<section class="youhui-lists">
 		<a v-for="item in topics" class="youhui" href="javascript:;">
 			<h3 class="youhui-title" title="{{ item.tab }}">{{ item.title }}</h3>
 			<div class="youhui-content">
-				<img :src="item.author['avatar_url']" alt="头像" class="youhui-avatar">
+				<img class="youhui-avatar" :src="item.author.avatar_url" alt="头像">
 				<div class="youhui-detail">
-					<p><span class="avatar-pic">{{ item.author.loginname }}</span><span class="reply-num"><i>{{ item.reply_count }}</i>/{{ item.visit_count }}</span></p>
-					<p><span>{{ item.create_at | getTimeStr true}}</span><span>{{ item.last_reply_at | getTimeStr true}}</span></p>
+					<p>
+						<span class="avatar-pic">{{ item.author.loginname }}</span>
+						<span class="reply-num"><i>{{ item.reply_count }}</i>/{{ item.visit_count }}</span>
+					</p>
+					<p>
+						<span>{{ item.create_at | getTimeStr true}}</span>
+						<span>{{ item.last_reply_at | getTimeStr true}}</span>
+					</p>
 				</div>
 			</div>
 		</a>		
-	</div>
+	</section>
+    <!-- 优惠列表 -->
 </template>
 
 <script>
@@ -106,6 +121,7 @@
 		data: function () {
 			return {
 				appName: 'VueApp',
+				pageType: '优惠',
 				navItems: [
 					{text: '优惠', link: '/youhui'},
 					{text: '海淘', link: '/haitao'}, 
@@ -127,17 +143,24 @@
 					tab: 'all',
 					mdrender: true
 				},
-				canScroll: true
+				canScroll: true,
+				showMenu: false
 			};
 		},
 		route: {
 			data: function (transition) {
 				var _self = this;
+				_self.showMenu = false;
 				_self.searchKey.page = 1;
 				_self.getTopics();
 
 				// 滚动加载更多
 				document.addEventListener('scroll', _self.getMoreTopics);
+			},
+			deactivate: function (transition) {
+				var _self = this;
+				document.removeEventListener('scroll', _self.getMoreTopics);
+                transition.next();
 			}
 		},
 		computed: {
@@ -186,9 +209,8 @@
 			}
 		},
 		components: {
-			'header-component': require('../components/header.vue'),
-			'nav-component': require('../components/nav.vue'),
-			'slide-component': require('../components/slide.vue')
+			'navHead': require('../components/header.vue'),
+			'slideComp': require('../components/slide.vue')
 		}
 	};
 </script>

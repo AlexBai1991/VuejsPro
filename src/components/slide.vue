@@ -64,6 +64,7 @@
 				deviceWidth: 0,
 				w: 0,
 				i: 0,
+				timer: null
 			};
 		},
 		created: function () {
@@ -71,19 +72,23 @@
 			this.deviceWidth = width;
 		},
 		ready: function () {
-			var slideItems = document.querySelector('.slide-items');
-			var width = this.deviceWidth,
-			    slideItems = this.slideItems;
-			var self = this;
+			var _self = this; 
+			var width = _self.deviceWidth,
+			    slideItems = _self.slideItems;
 			function autoPlay () {
-				if (self.i === slideItems.length) {
-					self.i = 0;
+				clearTimeout(_self.timer);
+				if (_self.i === slideItems.length) {
+					_self.i = 0;
 				}
-				self.w = -(self.i++) * width; 
-				setTimeout(autoPlay, 5000);
-				console.log(self.i);
+				_self.w = -(_self.i++) * width; 
+				_self.timer = setTimeout(autoPlay, 3000);
+				console.log('打印出来'+_self.i);
 			}
 			autoPlay();
+		},
+		destroyed: function () {
+			clearTimeout(this.timer);
 		}
+
 	};
 </script>

@@ -1,5 +1,6 @@
 require('../css/main.scss');
 
+// 全局错误处理
 window.onerror = function (err) {
 	alert(JSON.stringify(err));
 };
@@ -7,7 +8,8 @@ window.onerror = function (err) {
 var Vue = require('vue');
 var VueRouter = require('vue-router');
 
-var moment = require('moment'); // 时间格式化
+var moment = require('moment'); // 时间格式化库
+// 设置中文格式
 moment.locale('zh-cn');
 
 // install 路由
@@ -16,6 +18,16 @@ Vue.use(VueRouter);
 // 新建router
 var router =  new VueRouter();
 
+// 全局的前置钩子函数，这个函数会在路由切换开始时调用
+router.beforeEach(function (transition) {
+	document.documentElement.classList.remove('scroll-hide');
+	document.body.classList.remove('scroll-hide');
+   	if (transition.to.path === '/forbidden') {
+	    transition.abort()
+	} else {
+	    transition.next()
+	}
+});
 // 定义路由规则
 router.map({
 	'/': {
