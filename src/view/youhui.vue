@@ -85,8 +85,7 @@
 	<!-- 头部导航 -->
     <nav-head :app-name='appName'
     		:nav-items="navItems" 
-    		:show-menu.sync="showMenu"
-    		:page-type="pageType">
+    		:show-menu.sync="showMenu">
     </nav-head>
     <!-- 头部导航 -->
     <!-- 轮播图 -->
@@ -95,7 +94,9 @@
     <!-- 轮播图 -->
     <!-- 优惠列表 -->
 	<section class="youhui-lists">
-		<a v-for="item in topics" class="youhui" href="javascript:;">
+		<div v-for="item in topics" 
+			v-link="{ name: 'detail', params: { detailId: item.id } }" 
+			class="youhui">
 			<h3 class="youhui-title" title="{{ item.tab }}">{{ item.title }}</h3>
 			<div class="youhui-content">
 				<img class="youhui-avatar" :src="item.author.avatar_url" alt="头像">
@@ -110,7 +111,7 @@
 					</p>
 				</div>
 			</div>
-		</a>		
+		</div>		
 	</section>
     <!-- 优惠列表 -->
 </template>
@@ -121,20 +122,19 @@
 		data: function () {
 			return {
 				appName: 'VueApp',
-				pageType: '优惠',
 				navItems: [
-					{text: '优惠', link: '/youhui'},
-					{text: '海淘', link: '/haitao'}, 
-					{text: '发现', link: '/faxian'}, 
-					{text: '原创', link: '/yuanchuang'}, 
-					{text: '资讯', link: '/zixun'}
+					{text: '优惠', name: 'yh', tab: 'all'},
+					{text: '海淘', name: 'yh', tab: 'good'}, 
+					{text: '发现', name: 'yh', tab: 'share'}, 
+					{text: '原创', name: 'yh', tab: 'ask'}, 
+					{text: '资讯', name: 'yh', tab: 'job'}
 				],
 				slideItems: [
-					{ image: '//eimg.smzdm.com/201512/18/5673e592470586446.png', link: '://alexbai.githut.io'},
+					{ image: '//eimg.smzdm.com/201512/18/5673e592470586446.png', link: '//alexbai.github.io'},
 					{ image: '//eimg.smzdm.com/201512/18/5673e56bc72ad7183.jpg', link: ''},
 					{ image: '//eimg.smzdm.com/201512/18/567367923ebdd7381.png', link: ''},
 					{ image: '//eimg.smzdm.com/201512/18/5673e6540b1894931.png', link: ''},
-					{ image: '//eimg.smzdm.com/201512/18/5673e592470586446.png', link: '://alexbai.githut.io'},
+					{ image: '//eimg.smzdm.com/201512/18/5673e592470586446.png', link: '//alexbai.github.io'},
 				],
 				topics: [],
 				searchKey: {
@@ -149,9 +149,11 @@
 		},
 		route: {
 			data: function (transition) {
-				var _self = this;
+				var _self = this, tab = transition.to.query.tab || 'all';
+
 				_self.showMenu = false;
 				_self.searchKey.page = 1;
+				_self.searchKey.tab = tab;
 				_self.getTopics();
 
 				// 滚动加载更多

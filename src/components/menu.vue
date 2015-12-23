@@ -32,6 +32,22 @@
 					background-size: 25px;
 				}
 			}
+			@at-root .login-success {
+				height: 40px;
+				@at-root .login-user {
+					width: 40px;
+					height: 40px;
+					border-radius: 40px; 
+					vertical-align: middle;
+				}
+				@at-root .login-name {
+					display: inline-block;
+					height: 40px;
+					line-height: 40px;
+					vertical-align: middle;
+				}
+			}
+			
 		}
 		@at-root .side-menu-items {
 			padding-top: 10px;
@@ -51,16 +67,20 @@
 <template>
 	<aside class="side-menu" :class="{'side-menu-transiton': showMenu}">
 		<div class="user-info">
-			<p class="login-no">
-				<a href="">登录</a>
+			<p class="login-no" v-if="!loginName" @click="goEnter">
+				登录
 			</p>
+			<div class="login-success" v-if="loginName">
+				<img class="login-user" :src="avatarUrl" alt="头像">
+				<span class="login-name">{{ loginName }}</span>
+			</div>
 		</div>
 		<ul class="side-menu-items">
-			<li class="icon-quanbu iconfont" v-link="{ path: '/youhui' }">优惠</li>
-			<li class="icon-hao iconfont" v-link="{ path: '/haitao' }">海淘</li>
-			<li class="icon-wenda iconfont" v-link="{ path: '/faxian' }">发现</li>
-			<li class="icon-zhaopin iconfont" v-link="{ path: '/yuanchuang' }">原创</li>
-			<li class="icon-hao iconfont" v-link="{ path: '/zixun' }">资讯</li>
+			<li class="icon-quanbu iconfont" v-link="{ name: 'yh', query: {tab: 'all'} }">优惠</li>
+			<li class="icon-hao iconfont" v-link="{ name: 'yh', query: { tab: 'good' } }">海淘</li>
+			<li class="icon-wenda iconfont" v-link="{ name: 'yh', query: { tab: 'share' } }">发现</li>
+			<li class="icon-zhaopin iconfont" v-link="{ name: 'yh',query: { tab: 'ask' } }">原创</li>
+			<li class="icon-hao iconfont" v-link="{ name: 'yh', query: { tab: 'job' }}">资讯</li>
 			<li class="icon-xiaoxi iconfont br-top" v-link="{ path: '/xiaoxi' }">消息</li>
 			<li class="icon-about iconfont" v-link="{ path: '/guanyu' }">关于</li>
 		</ul>
@@ -73,10 +93,15 @@
 		props: ['showMenu'],
 		data: function () {
 			return {
+				loginName: localStorage.loginName || '',
+				avatarUrl: localStorage.avatarUrl || ''
 			};
 		},
 		methods: {
-
+			goEnter: function () {
+				var curPath = encodeURIComponent(this.$route.path);
+				this.$route.router.go({ name: 'login', query: { redirect: curPath } });
+			}
 		}
 	};
 </script>

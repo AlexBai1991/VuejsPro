@@ -2,18 +2,16 @@ module.exports = ajax;
 function ajax (option, success, failed) {
 
 	function getData (obj) {
-		if (!obj.length) {
-			return;
-		}
 		var res = [];
 		for (var name in obj) {
 			res.push(name + '=' + obj[name]);
 		}
-		return obj.join('&');
+		return res.join('&');
 	}
 	// option => {}
 	// xhr对象
 	var xhr,
+		self = this,
 		method = option.method || 'get',
 		url = option.url,
 		data = option.data || {};
@@ -30,14 +28,15 @@ function ajax (option, success, failed) {
 	if (method === 'get') {
 		xhr.send(null);
 	} else if (method === 'post') {
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(getData(data));
+		xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+		data = getData(data);
+		xhr.send(data);
 	}
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState === 4) {
 			if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
 				var resJson = JSON.parse(xhr.responseText);
-				success && success.call(this, resJson);
+				success && success.call(self, resJson);
 			} else {
 				failed && failed(xhr.status);
 			}

@@ -54,23 +54,22 @@
 <template>
 	<div v-if="showMenu" @click="closeNavMenu" class="page-cover"></div>
 	<header class="header" :class="{'header-transition': showMenu}">
-		<span @click="openNavMenu" class="icon-nav">导航</span>
+		<span @click="openNavMenu" class="icon-nav" v-if="!noNav">导航</span>
 		<h1>{{ appName }}</h1>
-		<span class="post-new iconfont">&#xe60f;</span>
+		<span class="post-new iconfont" v-if="!noPlus">&#xe60f;</span>
 	</header>
 	<!-- 侧边栏菜单 -->
 	<menu-comp :show-menu.sync="showMenu"></menu-comp>
 	<!-- 侧边栏菜单 -->
 	<!-- 导航菜单 -->
-	<nav-comp :nav-items="navItems"
-		:page-type="pageType">
+	<nav-comp :nav-items="navItems" v-if="!noTopNav">
 	</nav-comp>
 	<!-- 导航菜单 -->
 </template>
 
 <script>
 	module.exports = {
-		props: ['appName', 'showMenu', 'navItems', 'pageType'],
+		props: ['appName', 'showMenu', 'navItems', 'noNav', 'noPlus', 'noTopNav'],
 		data: function () {
 			return {
 			};

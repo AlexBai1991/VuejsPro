@@ -9,9 +9,11 @@
 		:nav-items="navItems">
 	</nav-head>
 	<div class="haitao-lists">
-		<button @click="openTimer">
-		TIMER
-		</button>
+	{{ $route.path }}
+	<br>
+	{{ $route.params | json }}
+	<br>
+	<router-view></router-view>
 		<a v-for="item in haitaoItems" class="list-item" href="javascript:;">
 			<div class="item-img">
 				<img :src="item.img" alt="图片">
@@ -32,11 +34,11 @@
 				appName: 'VueApp',
 				pageType: '海淘',
 				navItems: [
-					{text: '优惠', link: '/youhui'},
-					{text: '海淘', link: '/haitao'}, 
-					{text: '发现', link: '/faxian'}, 
-					{text: '原创', link: '/yuanchuang'}, 
-					{text: '资讯', link: '/zixun'}
+					{text: '优惠', name: 'yh'},
+					{text: '海淘', name: 'ht'}, 
+					{text: '发现', name: 'fx'}, 
+					{text: '原创', name: 'yc'}, 
+					{text: '资讯', name: 'zx'}
 				],
 				showMenu: false,
 				timer: null
@@ -44,6 +46,10 @@
 		},
 		created: function () {
 			// console.log(this.showMenu);
+			console.warn(this.$route);
+		},
+		route: {
+			test: 'haitaovue'
 		},
 		methods: {
 			openTimer: function () {

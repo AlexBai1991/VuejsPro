@@ -21,9 +21,8 @@
 
 <template>
 	<nav class="navigator">
-		<a v-link="{path: nav.link}" 
+		<a v-link="{ name: nav.name, query: { tab: nav.tab }, activeClass: 'active-nav' }" 
 			v-for="nav in navItems" 
-			:class="{'active-nav': nav.text == pageType}"
 			class="nav-item">
 			{{ nav.text }}
 		</a>
@@ -32,7 +31,7 @@
 
 <script>
 	module.exports = {
-		props: ['navItems', 'pageType'],
+		props: ['navItems'],
 		data: function () {
 			return {
 
