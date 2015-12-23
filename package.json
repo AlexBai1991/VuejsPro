@@ -35,6 +35,5 @@
     "vue-loader": "^7.2.0",
     "vue-router": "^0.7.7",
     "webpack": "^1.12.9",
-    "zepto": "0.0.4"
   }
 }
