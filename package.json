@@ -14,8 +14,6 @@
     "vuejs"
   ],
   "author": "alexbai",
-
-  
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.3.21",
