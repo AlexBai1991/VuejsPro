@@ -13,7 +13,7 @@ module.exports = {
 				return;
 			}
 		} else {
-			throw new Error('填写参数有误');
+			throw new Error('填写参数有误!');
 			return;
 		}
 
