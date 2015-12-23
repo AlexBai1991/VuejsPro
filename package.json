@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "none"
+    "url": "git@github.com:AlexBai1991/VuejsPro.git"
   },
   "keywords": [
     "vuejs"
