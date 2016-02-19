@@ -10,11 +10,9 @@ module.exports = {
 		} else if (typeof options === 'object' && !Array.isArray(options)) {
 			if(!options.url) {
 				throw new Error('url参数没有填写');
-				return;
 			}
 		} else {
 			throw new Error('填写参数有误!');
-			return;
 		}
 
 		var self = this;

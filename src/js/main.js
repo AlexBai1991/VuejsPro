@@ -1,3 +1,4 @@
+// 引用main.scss
 require('../css/main.scss');
 
 // 全局错误处理

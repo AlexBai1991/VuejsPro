@@ -112,7 +112,8 @@
 						_self.$route.router.go(redirect);			
 					}
 				}, function (err) {
-					console.log(err);
+					console.log("sdf" + err);
+					alert(err);
 				});
 				
 			}

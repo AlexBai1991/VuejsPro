@@ -123,7 +123,7 @@
 			return {
 				appName: 'VueApp',
 				navItems: [
-					{text: '优惠', name: 'yh', tab: 'all'},
+					{text: '优惠', name: 'yh', tab:'all'},
 					{text: '海淘', name: 'yh', tab: 'good'}, 
 					{text: '发现', name: 'yh', tab: 'share'}, 
 					{text: '原创', name: 'yh', tab: 'ask'}, 
