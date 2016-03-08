@@ -1,29 +1,27 @@
-var ajax = require('../lib/ajax.js');
-module.exports = {
-	fetchData: function (options, success, failed) {
-		if (!options) { return; }
+'use strict';
+
+import ajax from './ajax';
+
+export default {
+	fetchData(options, success, failed) {
+		if (!options) return;
 		if (typeof options === 'string') {
-			var temp = options;
+			let temp = options;
 			options = {
 				url: temp
 			};
 		} else if (typeof options === 'object' && !Array.isArray(options)) {
-			if(!options.url) {
-				throw new Error('url参数没有填写');
-			}
-		} else {
-			throw new Error('填写参数有误!');
-		}
+			if (!options.url) throw new Error('url参数没有填写');
+		} else throw new Error('填写参数有误!');
 
-		var self = this;
 		ajax({
 			method: options.method || 'get',
 			url: options.url,
 			data: options.data || {}
-		}, function (data) {
-			success && success.call(self, data);
-		}, function (err) {
-			failed && failed.call(self, err);
+		}, data => {
+			success && success.call(this, data);
+		}, err => {
+			failed && failed.call(this, err);
 		});
-	},
+	}
 };

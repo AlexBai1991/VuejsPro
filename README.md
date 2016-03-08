@@ -1,3 +1,3 @@
-readme
+# vuejsProject
 
-this is my vuejs project
+this is a start-up project developed by vue.js.

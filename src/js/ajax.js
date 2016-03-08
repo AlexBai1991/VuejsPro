@@ -1,17 +1,16 @@
-module.exports = ajax;
-function ajax (option, success, failed) {
+'use strict';
 
+export default function ajax(option, success, failed) {
 	function getData (obj) {
-		var res = [];
-		for (var name in obj) {
+		let res = [];
+		for (let name in obj) {
 			res.push(name + '=' + obj[name]);
 		}
 		return res.join('&');
 	}
 	// option => {}
 	// xhr对象
-	var xhr,
-		self = this,
+	let xhr,
 		method = option.method || 'get',
 		url = option.url,
 		data = option.data || {};
@@ -22,7 +21,7 @@ function ajax (option, success, failed) {
 		xhr = new ActiveXObject('Microsoft.XMLHTTP');
 	}
 	if (method === 'get' && data.length) {
-		url += '?'+getData(data);
+		url += '?' + getData(data);
 	}
 	xhr.open(method, url, true);
 	if (method === 'get') {
@@ -32,11 +31,11 @@ function ajax (option, success, failed) {
 		data = getData(data);
 		xhr.send(data);
 	}
-	xhr.onreadystatechange = function () {
+	xhr.onreadystatechange = () => {
 		if (xhr.readyState === 4) {
 			if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-				var resJson = JSON.parse(xhr.responseText);
-				success && success.call(self, resJson);
+				let resJson = JSON.parse(xhr.responseText);
+				success && success.call(this, resJson);
 			} else {
 				failed && failed(xhr.status);
 			}

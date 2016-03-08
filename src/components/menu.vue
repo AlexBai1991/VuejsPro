@@ -28,7 +28,7 @@
 					width: 25px;
 					height: 25px;
 					content: '';
-					background: url('../img/login_icon.png') no-repeat left center;
+					background: url('../assets/img/login_icon.png') no-repeat left center;
 					background-size: 25px;
 				}
 			}
