@@ -1,21 +1,21 @@
 @import 'reset';
 
 body {
-	width: 100%;
-	height: 100%;
-	-webkit-user-select: none;
-	-webkit-text-size-adjust: none;
-	background: #fff;
-	font-size: 14px;
-	line-height: 1;
-	color: #3e474e;
-	word-break: break-all;
-	word-wrap: break-word;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+  -webkit-text-size-adjust: none;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1;
+  color: #3e474e;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 /* 必需 */
 .slide-transition {
-	// position: absolute;
-  	transition: all .3s ease;
+  // position: absolute;
+    transition: all .3s ease;
   // transform: translate3d(0, 0, 0);
   // height: 30px;
   // padding: 10px;
@@ -23,18 +23,18 @@ body {
   // overflow: hidden;
 }
 .slide-enter {
-	// transform: translate3d(100%, 0, 0);
-	opacity: 0;
+  // transform: translate3d(100%, 0, 0);
+  opacity: 0;
 } 
 .slide-leave {
-	// transform: translate3d(-100%, 0, 0);
+  // transform: translate3d(-100%, 0, 0);
   // height: 0;
   // padding: 0 10px;
   opacity: 0;
 }
 
 .content-area {
-	margin: 0 10px;
+  margin: 0 10px;
 }
 
 .scroll-hide {

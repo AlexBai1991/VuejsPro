@@ -8,10 +8,10 @@ import VueResource from 'vue-resource';
 import RouterMap from './routers';
 import * as filters from './filters';
 
-// use vue-resource
-Vue.use(VueResource);
 // use vue-router
 Vue.use(VueRouter);
+// use vue-resource
+Vue.use(VueResource);
 
 // new router
 let router =  new VueRouter({

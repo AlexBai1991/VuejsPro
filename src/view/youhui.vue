@@ -1,15 +1,15 @@
 <template>
   <!-- 头部导航 -->
-    <nav-head :app-name='appName'
-        :nav-items="navItems" 
-        :show-menu.sync="showMenu">
-    </nav-head>
-    <!-- 头部导航 -->
-    <!-- 轮播图 -->
-    <slide-comp :slide-items="slideItems">
-    </slide-comp>
-    <!-- 轮播图 -->
-    <!-- 优惠列表 -->
+  <nav-head :app-name='appName'
+    :nav-items="navItems" 
+    :show-menu.sync="showMenu">
+  </nav-head>
+  <!-- 头部导航 -->
+  <!-- 轮播图 -->
+  <slide-comp :slide-items="slideItems">
+  </slide-comp>
+  <!-- 轮播图 -->
+  <!-- 优惠列表 -->
   <section class="youhui-lists">
     <div v-for="item in topics" 
       v-link="{ name: 'detail', params: { detailId: item.id } }" 
@@ -30,11 +30,10 @@
       </div>
     </div>    
   </section>
-    <!-- 优惠列表 -->
+  <!-- 优惠列表 -->
 </template>
 
 <script>
-  import storage from '../js/storage';
   export default {
     data() {
       return {
@@ -64,17 +63,9 @@
         showMenu: false
       };
     },
-    ready() {
-      this.$http({ url: 'https://cnodejs.org/api/v1/topics', method: 'GET'}).then(function (res) {
-        console.log(res);
-      }, function (err) {
-        console.log(err);
-      });
-    },
     route: {
       data(transition) {
         let tab = transition.to.query.tab || 'all';
-
         this.showMenu = false;
         this.searchKey.page = 1;
         this.searchKey.tab = tab;
@@ -97,26 +88,19 @@
       }
     },
     methods: {
-      getParams(obj) {
-        if (!obj || typeof obj !== 'object') return;
-        let res = [];
-        for (let key in obj) {
-          res.push(key + '=' + obj[key]);
-        }
-        return res.join('&');
-      },
       getTopics() {
-        let params = this.getParams(this.searchKey);
-        storage.fetchData('https://cnodejs.org/api/v1/topics?' + params, d => {
+        this.$http.get('https://cnodejs.org/api/v1/topics', this.searchKey).then(res => {
           this.canScroll = true;
-          let topics = d && d.data;
+          let topics = res.data && res.data.data;
           if (topics.length) {
             if (this.searchKey.page === 1) {
-              this.topics = d.data;
+              this.topics = topics;
             } else {
-              this.topics = this.topics.concat(d.data);
+              this.topics = this.topics.concat(topics);
             }
           }
+        }, err => {
+          if (err) console.error(`error: ${err}`);
         });
       },
       getMoreTopics(event) {
