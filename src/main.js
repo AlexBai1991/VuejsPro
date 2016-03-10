@@ -1,5 +1,5 @@
 // import main.scss
-require('./css/index.scss');
+require('./assets/css/index.scss');
 
 // libs
 import Vue from 'vue'; 

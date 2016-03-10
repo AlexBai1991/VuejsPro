@@ -48,7 +48,7 @@
 
 <script>
   var storage = require('../js/storage.js');
-  require('../css/github-markdown.css');
+  require('../assets/css/github-markdown.css');
   export default {
     data() {
       return {
